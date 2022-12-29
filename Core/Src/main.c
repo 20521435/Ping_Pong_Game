@@ -81,8 +81,6 @@ float Ange[3];
 char buff[40];
 char score[40];
 uint16_t R;
-uint16_t X;
-uint16_t Y;
 uint8_t p = 0;
 /* USER CODE END 0 */
 
@@ -125,7 +123,7 @@ int main(void)
   	BSP_LCD_SetTextColor(LCD_COLOR_WHITE);//set text color
   	BSP_LCD_SetFont(&Font20);
   	BSP_LCD_GetFont();
-  	BSP_LCD_FillCircle(120, 160, 10);
+  	BSP_LCD_FillCircle(120, 160, 15);
   	BSP_LCD_DisplayStringAtLine(1, (uint8_t*) "Scored: 0");
   /* USER CODE END 2 */
 
@@ -312,17 +310,15 @@ void StartTask01(void const * argument)
 {
   /* init code for USB_DEVICE */
   MX_USB_DEVICE_Init();
-  osSignalWait(0x1, osWaitForever);
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
-	  if(R == 15) {
-		  R = 0;
-	  }
-	  sprintf(buff, "Ball High: %dcm", R);
+	  osSignalWait(0x1, osWaitForever);
+	  R = R - 15;
+	  sprintf(buff, "Ball High: %dcm\n", R);
 	  CDC_Transmit_HS((uint8_t*) buff, strlen(buff));
-    osDelay(1);
+    osDelay(500);
   }
   /* USER CODE END 5 */
 }
@@ -375,22 +371,22 @@ void StartTask03(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	if (Ange[0] < -1) {
+	if (Ange[0] > 20) {
 		while (1) {
-			if (Ange[0] > 1) {
-				if (Ange[0] < 70) {
+			if (Ange[0] < -20) {
+				if (Ange[0] > -70) {
 					for (float i = 16; i < 41; i = i + 0.01) {
 						R = i;
 						BSP_LCD_FillCircle(120, 160, i);
 						osSignalSet(Task01Handle, 0x1);
 					}
-					for (float j = R; j > 15; j = j - 0.03) {
+					for (float j = R; j > 15; j = j - 0.025) {
 						R = j;
 						temp = (float) j - R;
-						if (temp < 0.03) {
+						if (temp < 0.025) {
 							BSP_LCD_Clear(LCD_COLOR_BLUE);
 						}
-						if (j > 15 && j < 15.50) {
+						if (j >= 15 && j < 15.1) {
 							osSignalSet(Task04Handle, 0x1);
 						}
 						sprintf(score, "Scored: %d", p);
@@ -401,7 +397,7 @@ void StartTask03(void const * argument)
 					}
 				}
 				else {
-					if (Ange[0] > 69 && Ange[0] < 80) {
+					if (Ange[0] < -69) {
 						for (float i = 16; i < 61; i = i + 0.01) {
 							R = i;
 							BSP_LCD_FillCircle(120, 160, i);
@@ -413,7 +409,7 @@ void StartTask03(void const * argument)
 							if (temp < 0.03) {
 								BSP_LCD_Clear(LCD_COLOR_BLUE);
 							}
-							if (j > 15 && j < 15.50) {
+							if (j >= 15 && j < 15.1) {
 								osSignalSet(Task04Handle, 0x1);
 							}
 							sprintf(score, "Scored: %d", p);
@@ -423,14 +419,14 @@ void StartTask03(void const * argument)
 						}
 					}
 				}
-				if (Ange[0] < 0) {
+				if (Ange[0] > 0) {
 					osSignalSet(Task04Handle, 0x2);
 				}
 			}
 		}
 	}
 	else {
-		R = 0;
+		R = 15;
 		osSignalSet(Task01Handle, 0x1);
 	}
     osDelay(1);
@@ -452,16 +448,17 @@ void StartTask04(void const * argument)
   for(;;)
   {
 	osSignalWait(0x1, osWaitForever);
-	if (Ange[0] > 1) {
+	if (Ange[0] < -15) {
 		p = p + 1;
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, 1);
-		osDelay(500);
+		HAL_Delay(500);
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, 0);
 		osSignalWait(0x2, osWaitForever);
 	}
 	else {
 			p = 0;
 			while (1) {
+				osThreadSuspend(Task01Handle);
 				osThreadSuspend(Task02Handle);
 				osThreadSuspend(Task03Handle);
 				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_14, 1);
