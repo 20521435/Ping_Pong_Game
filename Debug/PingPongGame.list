@@ -1864,11 +1864,12 @@ void StartTask01(void const * argument)
  800134a:	4619      	mov	r1, r3
  800134c:	4805      	ldr	r0, [pc, #20]	; (8001364 <StartTask01+0x58>)
  800134e:	f00d f865 	bl	800e41c <CDC_Transmit_HS>
-    osDelay(500);
- 8001352:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
- 8001356:	f009 f8fe 	bl	800a556 <osDelay>
+    osDelay(150);
+ 8001352:	2096      	movs	r0, #150	; 0x96
+ 8001354:	f009 f8ff 	bl	800a556 <osDelay>
 	  osSignalWait(0x1, osWaitForever);
- 800135a:	e7dd      	b.n	8001318 <StartTask01+0xc>
+ 8001358:	e7de      	b.n	8001318 <StartTask01+0xc>
+ 800135a:	bf00      	nop
  800135c:	2000068c 	.word	0x2000068c
  8001360:	08011bc4 	.word	0x08011bc4
  8001364:	2000063c 	.word	0x2000063c
@@ -2132,7 +2133,7 @@ void StartTask03(void const * argument)
  8001590:	485a      	ldr	r0, [pc, #360]	; (80016fc <StartTask03+0x284>)
  8001592:	f001 fc55 	bl	8002e40 <BSP_LCD_Clear>
 						}
-						if (j >= 15 && j < 15.1) {
+						if (j >= 15 && j < 15.07) {
  8001596:	edd7 7a0a 	vldr	s15, [r7, #40]	; 0x28
  800159a:	eeb2 7a0e 	vmov.f32	s14, #46	; 0x41700000  15.0
  800159e:	eef4 7ac7 	vcmpe.f32	s15, s14
@@ -2265,8 +2266,8 @@ void StartTask03(void const * argument)
  80016d4:	3f847ae1 	.word	0x3f847ae1
  80016d8:	9999999a 	.word	0x9999999a
  80016dc:	3f999999 	.word	0x3f999999
- 80016e0:	33333333 	.word	0x33333333
- 80016e4:	402e3333 	.word	0x402e3333
+ 80016e0:	0a3d70a4 	.word	0x0a3d70a4
+ 80016e4:	402e23d7 	.word	0x402e23d7
  80016e8:	20000630 	.word	0x20000630
  80016ec:	c28c0000 	.word	0xc28c0000
  80016f0:	2000068c 	.word	0x2000068c
@@ -2307,7 +2308,7 @@ void StartTask03(void const * argument)
  8001758:	483c      	ldr	r0, [pc, #240]	; (800184c <StartTask03+0x3d4>)
  800175a:	f001 fb71 	bl	8002e40 <BSP_LCD_Clear>
 							}
-							if (j >= 15 && j < 15.1) {
+							if (j >= 15 && j < 15.07) {
  800175e:	edd7 7a08 	vldr	s15, [r7, #32]
  8001762:	eeb2 7a0e 	vmov.f32	s14, #46	; 0x41700000  15.0
  8001766:	eef4 7ac7 	vcmpe.f32	s15, s14
@@ -2413,8 +2414,8 @@ void StartTask03(void const * argument)
  8001836:	bf00      	nop
  8001838:	eb851eb8 	.word	0xeb851eb8
  800183c:	3f9eb851 	.word	0x3f9eb851
- 8001840:	33333333 	.word	0x33333333
- 8001844:	402e3333 	.word	0x402e3333
+ 8001840:	0a3d70a4 	.word	0x0a3d70a4
+ 8001844:	402e23d7 	.word	0x402e23d7
  8001848:	2000068c 	.word	0x2000068c
  800184c:	ff0000ff 	.word	0xff0000ff
  8001850:	20000628 	.word	0x20000628
@@ -2445,10 +2446,10 @@ void StartTask04(void const * argument)
  8001876:	2101      	movs	r1, #1
  8001878:	4618      	mov	r0, r3
  800187a:	f008 fec1 	bl	800a600 <osSignalWait>
-	if (Ange[0] < -15) {
+	if (Ange[0] < -30) {
  800187e:	4b2d      	ldr	r3, [pc, #180]	; (8001934 <StartTask04+0xcc>)
  8001880:	edd3 7a00 	vldr	s15, [r3]
- 8001884:	eeba 7a0e 	vmov.f32	s14, #174	; 0xc1700000 -15.0
+ 8001884:	eebb 7a0e 	vmov.f32	s14, #190	; 0xc1f00000 -30.0
  8001888:	eef4 7ac7 	vcmpe.f32	s15, s14
  800188c:	eef1 fa10 	vmrs	APSR_nzcv, fpscr
  8001890:	d51d      	bpl.n	80018ce <StartTask04+0x66>

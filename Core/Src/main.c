@@ -318,7 +318,7 @@ void StartTask01(void const * argument)
 	  R = R - 15;
 	  sprintf(buff, "Ball High: %dcm\n", R);
 	  CDC_Transmit_HS((uint8_t*) buff, strlen(buff));
-    osDelay(500);
+    osDelay(150);
   }
   /* USER CODE END 5 */
 }
@@ -386,7 +386,7 @@ void StartTask03(void const * argument)
 						if (temp < 0.025) {
 							BSP_LCD_Clear(LCD_COLOR_BLUE);
 						}
-						if (j >= 15 && j < 15.1) {
+						if (j >= 15 && j < 15.07) {
 							osSignalSet(Task04Handle, 0x1);
 						}
 						sprintf(score, "Scored: %d", p);
@@ -409,7 +409,7 @@ void StartTask03(void const * argument)
 							if (temp < 0.03) {
 								BSP_LCD_Clear(LCD_COLOR_BLUE);
 							}
-							if (j >= 15 && j < 15.1) {
+							if (j >= 15 && j < 15.07) {
 								osSignalSet(Task04Handle, 0x1);
 							}
 							sprintf(score, "Scored: %d", p);
@@ -448,7 +448,7 @@ void StartTask04(void const * argument)
   for(;;)
   {
 	osSignalWait(0x1, osWaitForever);
-	if (Ange[0] < -15) {
+	if (Ange[0] < -30) {
 		p = p + 1;
 		HAL_GPIO_WritePin(GPIOG, GPIO_PIN_13, 1);
 		HAL_Delay(500);
